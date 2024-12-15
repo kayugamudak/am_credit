@@ -46,7 +46,7 @@ TESTS
 docker exec -it americor-credit-php-fpm ./vendor/bin/codecept run
 ```
 
-CODE SNIFFER
+STATIC ANALYZER
 ------------
 
 ```
