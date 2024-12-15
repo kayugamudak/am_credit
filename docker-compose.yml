@@ -1,0 +1,72 @@
+services:
+  nginx:
+       image: nginx:latest
+       container_name: americor-credit-nginx
+       restart: unless-stopped
+       volumes:
+         - .:/var/www/app
+         - ./docker/nginx/conf.d/:/etc/nginx/conf.d/:ro
+         - ./docker/log/nginx/:/var/log/nginx/
+       ports:
+         - "4000:80"
+         - "443:443"
+       environment:
+         - TZ=US/Pacific
+       depends_on:
+         - php-fpm
+
+  php-fpm:
+      build: docker/php-fpm
+      container_name: americor-credit-php-fpm
+      restart: unless-stopped
+      volumes:
+          - .:/var/www/app
+          - ./docker/php-fpm/php.ini:/usr/local/etc/php/conf.d/php.ini
+          - ./docker/php-fpm/supervisor/conf.d/:/etc/supervisor/conf.d/
+          - ./docker/log/supervisor/:/var/log/supervisor/
+      working_dir: /var/www/app
+      expose:
+        - 9000
+      environment:
+        - TZ=US/Pacific
+      depends_on:
+        - redis
+
+  pgsql:
+      image: postgres:16
+      container_name: americor-credit-pgsql
+      restart: unless-stopped
+      volumes:
+        - pg_data:/var/lib/postgresql/data
+      ports:
+        - 5432:5432
+      environment:
+        - TZ=US/Pacific
+        - PGTZ=GMT-8
+        - POSTGRES_DB=americor_credit
+        - POSTGRES_USER=root
+        - POSTGRES_PASSWORD=secret999
+
+
+  pgsql_test:
+      image: postgres:16
+      container_name: americor-credit-pgsql-test
+      restart: unless-stopped
+      ports:
+        - 5433:5432
+      environment:
+        - TZ=US/Pacific
+        - PGTZ=GMT-8
+        - POSTGRES_DB=americor_credit_test
+        - POSTGRES_USER=root
+        - POSTGRES_PASSWORD=secret999
+
+  redis:
+    image: redis:7.2
+    container_name: americor-credit-redis
+    restart: unless-stopped
+    ports:
+      - 6381:6379
+
+volumes:
+    pg_data:

@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<psalm
+    errorLevel="7"
+    resolveFromConfigFile="true"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="https://getpsalm.org/schema/config"
+    xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
+    findUnusedBaselineEntry="true"
+    findUnusedCode="true"
+>
+    <projectFiles>
+        <file name="requirements.php" />
+        <directory name="backend" />
+        <directory name="common" />
+        <directory name="console" />
+        <ignoreFiles>
+            <directory name="vendor" />
+            <directory name="console/migrations" />
+        </ignoreFiles>
+    </projectFiles>
+    <issueHandlers>
+
+        <UndefinedDocblockClass>
+            <errorLevel type="suppress">
+                <directory name="backend/tests/_support" />
+                <directory name="common/tests/_support" />
+            </errorLevel>
+        </UndefinedDocblockClass>
+        <UnusedClass errorLevel="suppress" />
+        <InvalidScope errorLevel="suppress" />
+        <UndefinedGlobalVariable errorLevel="suppress" />
+        <UnusedMethod>
+            <errorLevel type="suppress">
+                <directory name="backend/tests/_support" />
+                <directory name="common/tests/_support" />
+            </errorLevel>
+        </UnusedMethod>
+    </issueHandlers>
+</psalm>
